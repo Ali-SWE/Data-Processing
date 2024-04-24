@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Processing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+</head>
+<body class="bg-gray-100">
+    <div class="flex flex-col items-center justify-between px-24 mt-32 mb-5">
+        <h1 class="text-2xl font-bold mb-8">Upload a CSV File</h1>
+
+        <div class="box-border grid grid-cols-1 gap-y-8 justify-items-center mb-3
+        border-2 w-[80vw] md:w-[500px] border-primary p-[34px] rounded-[10px]">
+            <form class="grid gap-y-10 gap-x-[30px] md:gap-x-[55px]" id="my-form" method="post" action="http://localhost:3000/api" enctype="multipart/form-data"> 
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input">Upload file</label>
+                    <input name="file" id="file" type="file" aria-describedby="file_input_help" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none ">
+                </div>
+
+                <input id="my-btn" type="submit" class="ml-4 px-4 py-2 bg-slate-900 text-white cursor-pointer rounded-md hover:opacity-50"/>
+                
+            </form>
+        </div>
+
+        <div id="container" className="box-border grid grid-cols-1 gap-y-8 justify-items-center mb-3 w-[80vw] md:w-[500px] p-[34px]  border-2 border-red-500 rounded-[10px]">
+            <div class="grid justify-items-center mb-6">
+                <button id="show-summary-btn" class="block bg-transparent hover:bg-slate-900 text-slate-900 font-semibold hover:text-white py-2 px-4 border border-slate-900 hover:border-transparent rounded">
+                    Show Summary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const showSummaryBtn = document.getElementById("show-summary-btn")
+        const clearDbBtn = document.getElementById("clear-db")
+
+        showSummaryBtn.addEventListener("click", function(){
+            fetch("/summary")
+            .then(res => res.json())
+            .then(data => { 
+                showSummary(data)
+            })
+            .catch(err => alert("Error"))
+        })
+
+        const showSummary = (data) => {
+            const container = document.getElementById("container");
+
+            // delete old data
+            const oldTable = document.getElementById("data-table")
+            if(oldTable)
+                container.removeChild(oldTable)
+
+            // table element
+            const table = document.createElement("table");
+            table.className = "table-auto w-full";
+            table.id = "data-table"
+
+            // table header
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            const th1 = document.createElement("th");
+            th1.textContent = "Request Type";
+            const th2 = document.createElement("th");
+            th2.textContent = "Number of Records";
+
+            headerRow.appendChild(th1);
+            headerRow.appendChild(th2);
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // table body and data dynamically
+            const tbody = document.createElement("tbody");
+            for (const item of data) {
+                const tr = document.createElement("tr");
+                const td1 = document.createElement("td");
+                td1.className = "text-center";
+                td1.textContent = item.tableName;
+                const td2 = document.createElement("td");
+                td2.className = "text-center";
+                td2.textContent = item.count;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+
+            // Append the table to the container
+            container.appendChild(table);
+            };
+
+    </script>
+    
+</body>
+</html>

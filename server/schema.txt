@@ -1,0 +1,47 @@
+CREATE TABLE NewLicense (
+    RequestId INTEGER PRIMARY KEY,
+    RequestStatus INTEGER,
+    CompanyName TEXT,
+    LicenceType TEXT,
+    IsOffice INTEGER,
+    OfficeName TEXT,
+    OfficeServiceNumber TEXT,
+    RequestDate TEXT,
+    Activities TEXT
+    );
+
+CREATE TABLE AccountRequest (
+    RequestId INTEGER PRIMARY KEY,
+    RequestStatus INTEGER,
+    CompanyName TEXT,
+    RequesterName TEXT,
+    ApplicantName TEXT,
+    UserName TEXT,
+    ContactEmail TEXT,
+    Permissions TEXT
+    );
+
+CREATE TABLE InspectionRequest (
+    RequestId INTEGER PRIMARY KEY,
+    RequestStatus INTEGER,
+    CompanyName TEXT,
+    InspectionDate TEXT,
+    InspectionTime TEXT,
+    InspectionType TEXT
+    );
+
+CREATE TABLE AddActivity (
+    RequestId INTEGER PRIMARY KEY,
+    RequestStatus INTEGER,
+    CompanyName TEXT,
+    LicenceID TEXT,
+    Activities TEXT
+    );
+
+CREATE TABLE StampLicense (
+    RequestId INTEGER PRIMARY KEY,
+    RequestStatus INTEGER,
+    CompanyName TEXT,
+    LicenceID TEXT,
+    RequestDate TEXT
+    );
